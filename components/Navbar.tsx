@@ -19,7 +19,7 @@ export default function Navbar({ userName }: NavbarProps) {
           {userName && (
             <span className="text-sm text-muted-foreground">Welcome, {userName}</span>
           )}
-          <Button onClick={() => signOut({ callbackUrl: '/' })} variant="outline">
+          <Button onClick={() => signOut({ callbackUrl: `${window.location.origin}/` })} variant="outline">
             Sign Out
           </Button>
         </div>
