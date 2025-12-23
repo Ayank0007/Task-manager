@@ -7,7 +7,7 @@ export default function Footer() {
             <p>© 2025 Task Manager Pro. Built with Next.js 16 & AI.</p>
           </div>
           <div className="flex gap-4 items-center">
-            <span>Created by: Ayan Kumar</span>
+            <span>Created by: Ayan Khan</span>
             <span>•</span>
             <a
               href="https://github.com/Ayank0007"
