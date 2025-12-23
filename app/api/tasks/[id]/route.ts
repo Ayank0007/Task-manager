@@ -6,7 +6,7 @@ import { taskSchema } from '@/lib/validations';
 // GET a single task
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -18,9 +18,11 @@ export async function GET(
       );
     }
     
+    const { id } = await params;
+    
     const task = await prisma.task.findFirst({
       where: {
-        id: params.id,
+        id,
         userId: (session.user as any).id,
       },
     });
@@ -45,7 +47,7 @@ export async function GET(
 // PUT update a task
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -57,13 +59,14 @@ export async function PUT(
       );
     }
     
+    const { id } = await params;
     const body = await request.json();
     const validatedData = taskSchema.parse(body);
     
     // Check if task exists and belongs to user
     const existingTask = await prisma.task.findFirst({
       where: {
-        id: params.id,
+        id,
         userId: (session.user as any).id,
       },
     });
@@ -76,7 +79,7 @@ export async function PUT(
     }
     
     const task = await prisma.task.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...validatedData,
         dueDate: validatedData.dueDate ? new Date(validatedData.dueDate) : null,
@@ -105,7 +108,7 @@ export async function PUT(
 // DELETE a task
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const session = await auth();
@@ -117,10 +120,12 @@ export async function DELETE(
       );
     }
     
+    const { id } = await params;
+    
     // Check if task exists and belongs to user
     const existingTask = await prisma.task.findFirst({
       where: {
-        id: params.id,
+        id,
         userId: (session.user as any).id,
       },
     });
@@ -133,7 +138,7 @@ export async function DELETE(
     }
     
     await prisma.task.delete({
-      where: { id: params.id },
+      where: { id },
     });
     
     return NextResponse.json({ message: 'Task deleted successfully' });
