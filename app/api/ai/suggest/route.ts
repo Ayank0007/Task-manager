@@ -4,6 +4,9 @@ import { openai } from '@ai-sdk/openai';
 import { generateText } from 'ai';
 
 export async function POST(request: Request) {
+  let taskTitle = '';
+  let taskDescription = '';
+  
   try {
     const session = await auth();
     
@@ -14,7 +17,9 @@ export async function POST(request: Request) {
       );
     }
     
-    const { taskTitle, taskDescription } = await request.json();
+    const body = await request.json();
+    taskTitle = body.taskTitle;
+    taskDescription = body.taskDescription;
     
     if (!process.env.OPENAI_API_KEY) {
       return NextResponse.json(
@@ -52,33 +57,9 @@ Provide the response in JSON format with keys: description, priority, subtasks (
     }
   } catch (error: any) {
     console.error('AI suggestion error:', error);
-    
-    // Handle OpenAI quota/billing errors gracefully
-    if (error.status === 429 || error.code === 'insufficient_quota') {
-      return NextResponse.json({
-        suggestions: {
-          description: taskDescription || `Complete the task: ${taskTitle}`,
-          priority: 'MEDIUM',
-          subtasks: [
-            'Break down the task into smaller steps',
-            'Identify required resources',
-            'Set realistic deadlines',
-          ],
-          tags: ['user-created'],
-        },
-        message: 'AI suggestions unavailable (quota exceeded). Using default suggestions.',
-      });
-    }
-    
-    // Generic fallback for other errors
-    return NextResponse.json({
-      suggestions: {
-        description: taskDescription || `Complete the task: ${taskTitle}`,
-        priority: 'MEDIUM',
-        subtasks: [],
-        tags: [],
-      },
-      message: 'AI feature temporarily unavailable. You can still create tasks manually.',
-    });
+    return NextResponse.json(
+      { error: 'Failed to generate suggestions', details: error.message },
+      { status: 500 }
+    );
   }
 }
