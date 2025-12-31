@@ -338,9 +338,9 @@ This project is built for educational purposes as part of the House of Edtech Fu
 
 ## 👨‍💻 Developer
 
-**Name**: Ayan Kumar  
-**GitHub**: [github.com/ayankumar](https://github.com/ayankumar)  
-**LinkedIn**: [linkedin.com/in/ayankumar](https://linkedin.com/in/ayankumar)
+**Name**: Ayan Khan  
+**GitHub**: [github.com/ayankhan](https://github.com/ayank0007)  
+**LinkedIn**: [linkedin.com/in/ayankhan](https://linkedin.com/in/ayank0007)
 
 ## 🙏 Acknowledgments
 
